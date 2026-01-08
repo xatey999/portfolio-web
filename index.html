@@ -1,681 +1,619 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <title>Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Website Title -->
-    <title>Ujjwal Adhikari - Backend Developer</title>
-    <!-- Bootstrap -->
-    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font-Awesome -->
-    <link
-      href="assets/font-awesome/css/font-awesome.min.css"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <!-- Lightbox -->
-    <link href="assets/lightbox/css/lightbox.css" rel="stylesheet" />
-    <!-- Text Rotator-->
-    <link href="assets/textrotator/simpletextrotator.css" rel="stylesheet" />
-    <!-- FlexSlider -->
-    <link href="assets/flexslider/flexslider.css" rel="stylesheet" />
-    <!-- Theme Style -->
-    <link href="css/style.css" rel="stylesheet" />
-    <!-- Animations -->
-    <link href="css/animate.css" rel="stylesheet" />
-    <!-- Custom Favicon -->
-    <link href="img/icon.PNG" rel="shortcut icon" type="image/x-icon" />
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="assets/html5shiv/html5shiv.js"></script>
-      <script src="assets/respond/respond.min.js"></script>
-    <![endif]-->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: linear-gradient(135deg, #02060b 0%, #0a1a2d 100%);
+        font-family: "Inter", sans-serif;
+        color: #e6f2ff;
+        position: relative;
+      }
+
+      .panel-content {
+        display: none;
+      }
+
+      .panel-content.active {
+        display: block;
+      }
+
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #02060b;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transition: opacity 0.5s;
+      }
+
+      .loading-spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid rgba(102, 204, 255, 0.2);
+        border-top: 5px solid #66ccff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+      }
+
+      .header {
+        position: absolute;
+        top: 30px;
+        width: 100%;
+        text-align: center;
+        padding: 0 20px;
+        z-index: 20;
+      }
+
+      .header h1 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        letter-spacing: 3px;
+        background: linear-gradient(to right, #66ccff, #a3d9ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 30px rgba(102, 204, 255, 0.3);
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        font-weight: 300;
+        letter-spacing: 1px;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      #infoPanel {
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(11, 29, 42, 0.85);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(102, 204, 255, 0.3);
+        border-radius: 15px;
+        padding: 25px;
+        width: 320px;
+        pointer-events: auto;
+        box-shadow: 0 10px 40px rgba(0, 30, 60, 0.7);
+        transition: all 0.3s ease;
+        z-index: 30;
+      }
+
+      #infoPanel:hover {
+        border-color: rgba(102, 204, 255, 0.5);
+        box-shadow: 0 15px 50px rgba(0, 40, 80, 0.8);
+        transform: translateY(-50%) scale(1.02);
+      }
+
+      #infoPanel h2 {
+        font-family: "Montserrat", sans-serif;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #66ccff;
+        border-bottom: 2px solid rgba(102, 204, 255, 0.4);
+        padding-bottom: 10px;
+      }
+
+      #infoContent {
+        font-size: 1rem;
+        line-height: 1.6;
+        opacity: 0.95;
+      }
+
+      /* DESKTOP NAVIGATION */
+      #desktopNav {
+        position: absolute;
+        left: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(11, 29, 42, 0.85);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(102, 204, 255, 0.3);
+        border-radius: 15px;
+        padding: 25px;
+        width: 180px;
+        pointer-events: auto;
+        box-shadow: 0 10px 40px rgba(0, 30, 60, 0.7);
+        transition: all 0.3s ease;
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      #desktopNav:hover {
+        border-color: rgba(102, 204, 255, 0.5);
+        box-shadow: 0 15px 50px rgba(0, 40, 80, 0.8);
+        transform: translateY(-50%) scale(1.02);
+      }
+
+      .desktop-nav-btn {
+        background: rgba(102, 204, 255, 0.1);
+        border: 1px solid rgba(102, 204, 255, 0.3);
+        border-radius: 10px;
+        padding: 14px 20px;
+        color: #a3d9ff;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .desktop-nav-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 204, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s ease;
+      }
+
+      .desktop-nav-btn:hover {
+        background: rgba(102, 204, 255, 0.2);
+        border-color: #66ccff;
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(102, 204, 255, 0.3);
+      }
+
+      .desktop-nav-btn:hover::before {
+        left: 100%;
+      }
+
+      .desktop-nav-btn.active {
+        background: rgba(102, 204, 255, 0.25);
+        border-color: #66ccff;
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(102, 204, 255, 0.4);
+      }
+
+      .desktop-nav-btn i {
+        margin-right: 10px;
+        font-size: 1.1rem;
+      }
+
+      /* MOBILE NAVIGATION */
+      #mobileNav {
+        display: none;
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        pointer-events: auto;
+        z-index: 100;
+        padding: 0 20px;
+      }
+
+      .nav-btn {
+        background: rgba(11, 29, 42, 0.9);
+        border: 1px solid rgba(102, 204, 255, 0.4);
+        border-radius: 50px;
+        padding: 14px 25px;
+        color: #a3d9ff;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        font-size: 0.95rem;
+        min-width: 130px;
+        text-align: center;
+      }
+
+      .nav-btn:hover {
+        background: rgba(102, 204, 255, 0.2);
+        border-color: #66ccff;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(102, 204, 255, 0.3);
+      }
+
+      .footer {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        opacity: 0.7;
+        letter-spacing: 1px;
+        z-index: 10;
+      }
+
+      @media (max-width: 1200px) {
+        #desktopNav {
+          left: 20px;
+          width: 160px;
+          padding: 20px;
+        }
+
+        .desktop-nav-btn {
+          padding: 12px 15px;
+          font-size: 0.95rem;
+        }
+
+        #infoPanel {
+          right: 20px;
+          width: 300px;
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 992px) {
+        #desktopNav {
+          width: 150px;
+          padding: 15px;
+        }
+
+        .desktop-nav-btn {
+          padding: 10px 12px;
+          font-size: 0.9rem;
+        }
+
+        .desktop-nav-btn i {
+          margin-right: 8px;
+          font-size: 1rem;
+        }
+
+        #infoPanel {
+          width: 280px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        #desktopNav {
+          display: none;
+        }
+
+        #infoPanel {
+          position: static;
+          width: 90%;
+          max-width: 500px;
+          margin: 100px auto 30px;
+          transform: none;
+          top: auto;
+          right: auto;
+          background: rgba(11, 29, 42, 0.9);
+        }
+
+        .header {
+          top: 20px;
+        }
+
+        #mobileNav {
+          display: flex;
+        }
+
+        .footer {
+          bottom: 90px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .header p {
+          font-size: 0.9rem;
+        }
+
+        #mobileNav {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .nav-btn {
+          padding: 12px 20px;
+          min-width: 110px;
+          font-size: 0.9rem;
+          flex: 1;
+          max-width: 160px;
+        }
+
+        #infoPanel {
+          margin: 80px auto 20px;
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .nav-btn {
+          padding: 10px 15px;
+          min-width: 100px;
+          font-size: 0.85rem;
+        }
+
+        #mobileNav {
+          gap: 8px;
+        }
+      }
+
+      /* Snow overlay effect */
+      .snow-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background-image: radial-gradient(
+            circle at 20% 80%,
+            rgba(102, 204, 255, 0.05) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(102, 204, 255, 0.03) 0%,
+            transparent 50%
+          );
+        z-index: 1;
+      }
+
+      /* Yeti roar animation for title */
+      @keyframes roar {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      .header h1 {
+        animation: roar 3s ease-in-out infinite;
+      }
+
+      /* Glow effect for active sections */
+      .glow {
+        text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+      }
+    </style>
   </head>
-  <body id="top">
-    <!-- ****************************** Preloader ************************** -->
-    <div id="preloader"></div>
-
-    <!-- ==========================
-        HEADER SECTION 
-        =========================== -->
-    <header id="home">
-      <!-- creative menu -->
-      <div class="container-fluid">
-        <div class="row">
-          <div class="menu-wrap">
-            <nav class="menu">
-              <!-- Menu Links -->
-              <div class="icon-list">
-                <a href="index.html#home"
-                  ><i class="fa fa-fw fa-home"></i><span>Home</span></a
-                >
-                <a href="index.html#about"
-                  ><i class="fa fa-fw fa-quote-left"></i><span>About</span></a
-                >
-                <a href="index.html#service"
-                  ><i class="fa fa-fw fa-globe"></i><span>Service</span></a
-                >
-                <a href="index.html#portfolio"
-                  ><i class="fa fa-fw fa-picture-o"></i
-                  ><span>Portfolio</span></a
-                >
-                <a href="index.html#contact"
-                  ><i class="fa fa-fw fa-envelope-o"></i><span>Contact</span></a
-                >
-              </div>
-            </nav>
-          </div>
-          <button class="menu-button" id="open-button"></button
-          ><!-- menu button -->
-        </div>
-        <!--/row-->
-      </div>
-      <!--/container-->
-      <!-- Header Image -->
-      <section class="hero" id="hero">
-        <div class="container">
-          <!-- Slider Button (don't edit!)-->
-          <div class="row">
-            <div class="col-md-12 text-right navicon">
-              <a id="nav-toggle" class="nav_slide_button" href="index.html#"
-                ><span></span
-              ></a>
-            </div>
-          </div>
-          <!-- HEADER HEADLINE -->
-          <div class="row">
-            <div class="col-md-8 col-md-offset-1 inner">
-              <h1 class="animated fadeInDown">
-                Ujj<span style="color: #e04343">w</span>al<br />
-                <span>Adhi<span style="color: #ffe800">k</span>ari</span>
-              </h1>
-              <!-- Title -->
-              <h3 class="animated fadeInUp delay-05s">
-                <span class="rotate">Backend Developer</span>
-              </h3>
-              <!-- Text Rotator -->
-            </div>
-          </div>
-          <!-- Learn More Button -->
-          <div class="row">
-            <div class="col-md-6 col-md-offset-3 text-center">
-              <a href="index.html#about" class="scrollto wow fadeInUp delay-5s">
-                <p>SEE MORE</p>
-                <p class="scrollto--arrow">
-                  <img src="img/scroll-down.png" alt="scroll down arrow" />
-                </p>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- Header Image End -->
-    </header>
-    <!-- ==========================
-        HEADER SECTION END  
-        =========================== -->
-
-    <!-- ==========================
-        ABOUT SECTION  
-        =========================== -->
-    <section class="intro text-center section-padding color-bg" id="about">
-      <div class="container">
-        <!-- WELCOME TEXT -->
-        <div class="row">
-          <div class="col-md-8 col-md-offset-2 wp1">
-            <h1 class="arrow">A little <span>about</span> me</h1>
-            <!-- Headline -->
-            <!-- about / welcome text -->
-            <p>
-              I am Ujjwal Adhikari. An IT graduate of LA
-              GRANDEE Internation College, Pokhara. The love for computers and
-              video games has driven me to pursue my career in IT. I am always
-              looking to learn something new and useful to upskill myself and
-              through facing different challenges and problems I am ready to
-              hone my skills to be able to solve real world problems in IT
-              field.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================
-        SERVICE SECTION 
-        =========================== -->
-    <section class="features text-center section-padding" id="service">
-      <div class="container">
-        <!-- Headline -->
-        <div class="row">
-          <div class="col-md-12">
-            <h1 class="arrow">My Hobbies</h1>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="services">
-              <!-- Service Box 1 -->
-              <div class="col-md-4 wp2 item">
-                <div class="icon">
-                  <i class="fa-solid fa-gamepad"></i
-                  ><!-- Icon -->
-                </div>
-                <h2>Gamer</h2>
-                <!-- Title -->
-                <p>
-                  Gaming is my passion. I love playing first-person shooters
-                  like Valorant and Counter-Strike, where I can test my skills
-                  and strategies in intense battles. But my interests don't stop
-                  there—I also dive into the vast, open worlds of GTA, get my
-                  adrenaline pumping with high-speed races in Need for Speed,
-                  and enjoy the excitement of sports games like FIFA and NBA. I
-                  even step into the ring with WWE. My diverse taste in games
-                  keeps my gaming experience fresh and exciting, allowing me to
-                  explore and enjoy a wide variety of virtual adventures.
-                </p>
-                <!-- Description -->
-              </div>
-              <!-- Service Box 2 -->
-              <div class="col-md-4 wp2 item delay-05s">
-                <div class="icon">
-                  <i class="fa fa-desktop"></i
-                  ><!-- Icon -->
-                </div>
-                <h2>Coder</h2>
-                <!-- Title -->
-                <p>
-                  I have a strong passion for coding. During my internship at
-                  Pine Softwares, I built several projects using Laravel, which
-                  allowed me to deepen my understanding of web development. This
-                  experience not only honed my technical skills but also fueled
-                  my continuous hunger to upskill and learn new things every
-                  day. Throughout my learning phase, I also gained knowledge and
-                  experience in languages such as C, C++, Java, PHP, and
-                  JavaScript, building various projects during my college years.
-                  I am always eager to explore new technologies, frameworks, and
-                  methodologies, constantly seeking ways to enhance my knowledge
-                  and stay updated in the ever-evolving field of programming.
-                </p>
-                <!-- Description -->
-              </div>
-              <!-- Service Box 3 -->
-              <div class="col-md-4 wp2 item delay-1s">
-                <div class="icon">
-                  <i class="fa-solid fa-guitar"></i
-                  ><!-- Icon -->
-                </div>
-                <h2>Guitarist</h2>
-                <!-- Title -->
-                <p>
-                  I am passionate about playing musical instruments,
-                  particularly the guitar. I've been playing guitar for the past
-                  10 years, and I love the experience of learning new songs and
-                  playing whenever I feel like it. Music has always been a
-                  significant part of my life, and playing the guitar allows me
-                  to express myself creatively and unwind from the daily grind.
-                  Whether I am strumming my favorite tunes or challenging myself
-                  with new melodies, my passion for guitar playing remains a
-                  constant source of joy and fulfillment.
-                </p>
-                <!-- Description -->
-              </div>
-            </div>
-            <div class="clearfix"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================
-        ABOUT SECTION END
-        =========================== -->
-
-    <!-- ==========================
-        PORTFOLIO SECTION
-    =========================== -->
-    <section class="swag text-center" id="portfolio">
-      <div class="container">
-        <!-- Headline -->
-        <div class="row">
-          <h1 class="arrow">Recent <span>Porojects</span></h1>
-        </div>
-      </div>
-    </section>
-
-    <div class="container">
-      <div class="row row-offset-0">
-        <!-- PORTFOLIO ITEM 1 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-01-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project One - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-01-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 2 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-02-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Two - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-02-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 3 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-03-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Three - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-03-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 4 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-04-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Four - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-04-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 5 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-05-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Five - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-05-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 6 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-06-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Six - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-06-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 7 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-07-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Seven - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-07-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-
-        <!-- PORTFOLIO ITEM 8 -->
-        <div class="col-md-3 col-sm-6">
-          <div class="overlay-effect effects clearfix">
-            <div class="img">
-              <a
-                href="img/portfolio/portfolio-08-large.jpg"
-                data-lightbox="roadtrip"
-                title="Project Eight - Lorem Ipsum"
-                ><img
-                  class="grayscale"
-                  src="img/portfolio/portfolio-08-thumbnail.jpg"
-                  alt="Portfolio Item"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <!-- PORTFOLIO ITEM END -->
-      </div>
-      <!--/row-->
+  <body>
+    <div id="loading">
+      <div class="loading-spinner"></div>
+      <p>Entering the Frozen Domain...</p>
     </div>
-    <!--/.container-->
-    <!-- ==========================
-        PORTFOLIO SECTION END
-        =========================== -->
 
-    <!-- ==========================
-        CUSTOM SPACER
-        =========================== -->
-    <div class="spacer-cta text-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <a href="index.html#contact" class="outline-btn">hire ujjwal</a>
-          </div>
+    <div id="overlay">
+      <div class="header">
+        <h1>Ujjwal Adhikari</h1>
+        <h2>Full Stack Developer</h2>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div id="desktopNav">
+        <button class="desktop-nav-btn active" data-section="about">
+          <i class="fas fa-user"></i> About Me
+        </button>
+        <button class="desktop-nav-btn" data-section="projects">
+          <i class="fas fa-code"></i> Projects
+        </button>
+        <button class="desktop-nav-btn" data-section="skills">
+          <i class="fas fa-cogs"></i> Skills
+        </button>
+        <button class="desktop-nav-btn" data-section="contact">
+          <i class="fas fa-envelope"></i> Contact
+        </button>
+      </div>
+
+      <!-- Info Panel About Me -->
+      <div id="infoPanel">
+        <h2 id="panelTitle">ABOUT ME</h2>
+
+        <!-- About Me Content Here -->
+        <div class="panel-content active" id="about">
+          <p>
+            Hi, I am <b>Ujjwal Adhikari</b>, a full-stack developer from
+            Pokhara, Nepal.
+          </p>
+          <p>
+            With over 2 years of experience in full stack development
+            specialized in TALL stack (Tailwind, Alpine, Laravel, Livewire). I
+            have been able to craft digital solutions to my clients based on
+            their requirements and to the best of their needs.
+          </p>
+          <br />
+          <p><strong>Specialties:</strong></p>
+          <p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              id="Laravel-Logo-1--Streamline-Logos"
+              height="18"
+              width="24"
+            >
+              <path
+                fill="#66ccff"
+                fill-rule="evenodd"
+                d="M6.335 0.83a0.75 0.75 0 0 0 -0.67 0L1.667 2.827a0.754 0.754 0 0 0 -0.417 0.672V18c0 0.271 0.146 0.52 0.382 0.654l7.989 4.493a0.753 0.753 0 0 0 0.747 0.007l8 -4.5A0.75 0.75 0 0 0 18.75 18v-4.537l3.585 -1.792A0.75 0.75 0 0 0 22.75 11V6a0.75 0.75 0 0 0 -0.417 -0.672l-3.998 -1.999a0.75 0.75 0 0 0 -0.67 0l-3.997 1.999a0.722 0.722 0 0 0 -0.246 0.194 0.748 0.748 0 0 0 -0.172 0.478v4.561l-2.5 1.407V3.5a0.747 0.747 0 0 0 -0.43 -0.678L6.336 0.829Zm7.686 11.019 2.38 1.19 -6.422 3.612 -2.38 -1.19 6.422 -3.612Zm3.229 -0.063 -2.5 -1.25V7.215l2.5 1.25v3.322Zm1.5 0 2.5 -1.25V7.215l-2.5 1.25v3.322Zm-9.5 1.025V4.714l-2.5 1.25v8.254l2.5 -1.407Zm-1.005 4.65 0.743 0.372c0.17 0.091 0.262 0.153 0.262 0.183v3.202l-6.5 -3.657V4.714l2.5 1.25V15.5a0.75 0.75 0 0 0 0.415 0.67s1.122 0.591 2.108 1.064l0.472 0.227Zm2.505 0.478 6.5 -3.657v3.28l-6.5 3.656v-3.28ZM6 4.66 3.677 3.5 6 2.339 8.323 3.5 6 4.661ZM20.323 6 18 4.839 15.677 6 18 7.161 20.323 6Z"
+                clip-rule="evenodd"
+                stroke-width="1"
+              ></path>
+            </svg>
+            Laravel
+          </p>
+          <p>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              id="Livewire--Streamline-Simple-Icons"
+              height="18"
+              width="24"
+            >
+              <path
+                d="M12.001 0C6.1735 0 1.4482 4.9569 1.4482 11.0723c0 2.0888 0.5518 4.0417 1.5098 5.709 0.2492 0.2796 0.544 0.4843 0.9649 0.4843 1.3388 0 1.2678 -2.0644 2.6074 -2.0644 1.3395 0 1.4111 2.0644 2.75 2.0644 1.3388 0 1.2659 -2.0644 2.6054 -2.0644 0.5845 0 0.9278 0.3967 1.2403 0.8398 -0.2213 -0.2055 -0.4794 -0.3476 -0.8203 -0.3476 -1.1956 0 -1.3063 1.6771 -2.2012 2.1406v4.5097c0 0.9145 0.7418 1.6563 1.6562 1.6563 0.9145 0 1.6563 -0.7418 1.6563 -1.6563v-5.8925c0.308 0.4332 0.647 0.8144 1.2207 0.8144 1.3388 0 1.266 -2.0644 2.6055 -2.0644 0.465 0 0.7734 0.2552 1.039 0.58 -0.1294 -0.0533 -0.2695 -0.0878 -0.4297 -0.0878 -1.1582 0 -1.296 1.574 -2.1171 2.0937v2.4356c0 0.823 0.6672 1.4902 1.4902 1.4902s1.4902 -0.6672 1.4902 -1.4902V16.371c0.3234 0.4657 0.6684 0.8945 1.2774 0.8945 0.7955 0 1.093 -0.7287 1.4843 -1.3203 0.6878 -1.4704 1.0743 -3.1245 1.0743 -4.873C22.5518 4.9569 17.8284 0 12.001 0zm-0.5664 2.877c2.8797 0 5.2148 2.7836 5.2148 5.8066 0 3.023 -1.5455 5.1504 -5.2148 5.1504 -3.6693 0 -5.2149 -2.1274 -5.2149 -5.1504S8.5548 2.877 11.4346 2.877zm-1.4024 1.66a1.9554 2.1583 0 0 0 -1.955 2.1582 1.9554 2.1583 0 0 0 1.955 2.1582 1.9554 2.1583 0 0 0 1.9551 -2.1582 1.9554 2.1583 0 0 0 -1.955 -2.1582zm-0.3261 0.664a0.9777 0.9961 0 0 1 0.9785 0.9962 0.9777 0.9961 0 0 1 -0.9785 0.996 0.9777 0.9961 0 0 1 -0.9766 -0.996 0.9777 0.9961 0 0 1 0.9766 -0.9961zM6.7568 15.6935c-1.0746 0 -1.2724 1.3542 -1.9511 1.9648v1.7813c0 0.823 0.6672 1.4902 1.4902 1.4902s1.4902 -0.6672 1.4902 -1.4902v-3.1817c-0.2643 -0.3237 -0.5767 -0.5644 -1.0293 -0.5644Z"
+                fill="#66ccff"
+                clip-rule="evenodd"
+                stroke-width="1"
+              ></path>
+            </svg>
+            Livewire
+          </p>
+          <p>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              id="Tailwindcss--Streamline-Simple-Icons"
+              height="18"
+              width="24"
+            >
+              <path
+                d="M12.001 4.8c-3.2 0 -5.2 1.6 -6 4.8 1.2 -1.6 2.6 -2.2 4.2 -1.8 0.913 0.228 1.565 0.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2 -1.6 6 -4.8 -1.2 1.6 -2.6 2.2 -4.2 1.8 -0.913 -0.228 -1.565 -0.89 -2.288 -1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0 -5.2 1.6 -6 4.8 1.2 -1.6 2.6 -2.2 4.2 -1.8 0.913 0.228 1.565 0.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2 -1.6 6 -4.8 -1.2 1.6 -2.6 2.2 -4.2 1.8 -0.913 -0.228 -1.565 -0.89 -2.288 -1.624C10.337 13.382 8.976 12 6.001 12z"
+                fill="#66ccff"
+                stroke-width="1"
+              ></path>
+            </svg>
+            Tailwind CSS
+          </p>
+          <p>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              id="Alpinedotjs--Streamline-Simple-Icons"
+              height="18"
+              width="24"
+            >
+              <path
+                d="m24 12 -5.72 5.746 -5.724 -5.741 5.724 -5.75L24 12zM5.72 6.254 0 12l5.72 5.746h11.44L5.72 6.254z"
+                fill="#66ccff"
+                stroke-width="1"
+              ></path>
+            </svg>
+            Alpine.js
+          </p>
+          <p>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              id="Vuedotjs--Streamline-Simple-Icons"
+              height="18"
+              width="24"
+            >
+              <path
+                d="M24 1.61h-9.94L12 5.16 9.94 1.61H0l12 20.78ZM12 14.08 5.16 2.23h4.43L12 6.41l2.41 -4.18h4.43Z"
+                fill="#66ccff"
+                stroke-width="1"
+              ></path>
+            </svg>
+            Vue.js
+          </p>
+        </div>
+
+        <!-- My Projects content -->
+        <div class="panel-content" id="projects">
+          <p>Here are my projects</p>
+        </div>
+
+        <!-- My Skills content -->
+        <div class="panel-content" id="skills">
+          <p>Here are my skills</p>
+        </div>
+
+        <!-- Contact Me content -->
+        <div class="panel-content" id="contact">
+          <p>Please hire me :`(</p>
         </div>
       </div>
+
+      <!-- Mobile Navigation -->
+      <div id="mobileNav">
+        <button class="nav-btn" data-section="about">About</button>
+        <button class="nav-btn" data-section="projects">Projects</button>
+        <button class="nav-btn" data-section="skills">Skills</button>
+        <button class="nav-btn" data-section="contact">Contact</button>
+      </div>
+
+      <!-- Footer Section -->
+      <div class="footer">
+        <p>
+          Copyright © <span id="currentYear"></span> Ujjwal Adhikari | Privacy
+          Policy | Terms & Conditions
+        </p>
+      </div>
+
+      <div class="snow-overlay"></div>
     </div>
-    <!-- ==========================
-        CUSTOM SPACER END
-        =========================== -->
 
-    <!-- ==========================
-        BLOG SECTION 
-        =========================== -->
-
-    <!-- ==========================
-        BLOG SECTION END
-        =========================== -->
-
-    <!-- ==========================
-        CLIENT SECTION 
-        =========================== -->
-    <!-- ==========================
-        CLIENTS SECTION END
-        =========================== -->
-
-    <!-- ==========================
-        NEWSLETTER SECTION 
-        =========================== -->
-    <!-- ==========================
-        NEWSLETTER SECTION END
-        =========================== -->
-
-    <!-- ==========================
-        CONTACT SECTION
-        =========================== -->
-    <section class="text-center section-padding contact-wrap" id="contact">
-      <!-- To Top Button -->
-      <a href="index.html#top" class="up-btn"
-        ><i class="fa fa-chevron-up"></i
-      ></a>
-      <div class="container">
-        <!-- Headline -->
-        <div class="row">
-          <div class="col-md-12">
-            <h1 class="arrow">Drop <span>me</span> a line</h1>
-          </div>
-        </div>
-        <div class="row contact-details">
-          <!-- Adress Box -->
-          <div class="col-md-4">
-            <div class="dark-box box-hover">
-              <h2><i class="fa fa-map-marker"></i><span>Address</span></h2>
-              <p>Pokhara-Kaski,Nepal</p>
-            </div>
-          </div>
-          <!-- Phone Number Box -->
-          <div class="col-md-4">
-            <div class="dark-box box-hover">
-              <h2><i class="fa fa-mobile"></i><span>Phone</span></h2>
-              <p>9816137858</p>
-            </div>
-          </div>
-          <!-- E-Mail Box -->
-          <div class="col-md-4">
-            <div class="dark-box box-hover">
-              <h2><i class="fa fa-paper-plane"></i><span>Email</span></h2>
-              <p>ujjwal999adhikari@gmail.com</p>
-            </div>
-          </div>
-        </div>
-        <div
-          class="row"
-          style="display: flex; align-items: center; justify-content: center"
-        >
-          <!-- Contact Form -->
-          <div class="col-md-6 contact">
-            <form role="form" action="#" method="POST">
-              <!-- Name -->
-              <div class="row">
-                <div class="col-md-6">
-                  <!-- E-Mail -->
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="name"
-                      placeholder="Your name"
-                      required
-                    />
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <!-- Phone Number -->
-                  <div class="form-group">
-                    <input
-                      type="email"
-                      class="form-control"
-                      name="email"
-                      placeholder="Email address"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-              <!-- Message Area -->
-              <div class="form-group">
-                <textarea
-                  class="form-control"
-                  name="message"
-                  placeholder="Write your message here..."
-                  style="height: 232px"
-                  required
-                ></textarea>
-              </div>
-              <!-- Submit Button -->
-              <button type="submit" class="btn btn-send">Send message</button>
-            </form>
-          </div>
-        </div>
-
-        <br />
-        <!-- Social Buttons - use font-awesome, past in what you want -->
-        <div class="row">
-          <div class="col-md-12">
-            <ul class="social-buttons">
-              <!-- dribble -->
-              <li>
-                <a href="https://x.com/xatey999" class="social-btn"
-                  ><i class="fa fa-twitter"></i
-                ></a>
-              </li>
-              <!-- twitter -->
-              <li>
-                <a
-                  href="https://www.facebook.com/ujjwal.adhikari.526438"
-                  class="social-btn"
-                  ><i class="fa fa-facebook"></i
-                ></a>
-              </li>
-              <!-- facebook -->
-              <li>
-                <a href="https://www.instagram.com/xatey_999" class="social-btn"
-                  ><i class="fa fa-instagram"></i
-                ></a>
-              </li>
-              <!-- instagram -->
-              <li>
-                <a href="https://www.youtube.com/@xatey999" class="social-btn"
-                  ><i class="fa fa-youtube"></i
-                ></a>
-              </li>
-              <!-- youtube -->
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- ==========================
-        CONTACT SECTION END
-        =========================== -->
-
-    <!-- ==========================
-        FOOTER SECTION
-        =========================== -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <p>All Rights Reserved. &copy; 2025, Ujjwal Adhikari</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- ==========================
-        FOOTER SECTION END
-        =========================== -->
-
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <!-- SmoothScroll -->
-    <script
-      type="text/javascript"
-      src="assets/smoothscroll/smoothscroll.js"
-    ></script>
-    <!-- Bootstrap -->
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Waypoints -->
-    <script src="js/waypoints.min.js"></script>
-    <!-- classie.js -->
-    <script src="js/classie.js"></script>
-    <!-- FlexSlider -->
-    <script src="assets/flexslider/jquery.flexslider.js"></script>
-    <!-- Modernizr -->
-    <script src="js/modernizr.js"></script>
-    <!-- Text Rotator -->
-    <script src="assets/textrotator/jquery.simple-text-rotator.js"></script>
-    <!-- Lightbox.js -->
-    <script src="assets/lightbox/js/lightbox.min.js"></script>
-    <!-- Google Maps -->
-    <!-- Theme JavaScript Core -->
-    <script src="js/main.js"></script>
-    <script src="js/script.js"></script>
-
-    <!-- GOOGLE MAPS DATA -->
-    <script type="text/javascript">
-      // When the window has finished loading create our google map below
-      google.maps.event.addDomListener(window, "load", init);
-
-      function init() {
-        // Basic options for a simple Google Map
-        // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
-        var mapOptions = {
-          // How zoomed in you want the map to start at (always required)
-          zoom: 15,
-
-          scrollwheel: false,
-
-          // The latitude and longitude to center the map (always required)
-          center: new google.maps.LatLng(40.68961985411178, -74.01618003845215), // New York
-
-          // How you would like to style the map.
-          // This is where you would paste any style found on Snazzy Maps.
-          styles: [
-            {
-              featureType: "water",
-              stylers: [{ color: "#F2F2F2" }, { visibility: "on" }],
-            },
-            { featureType: "landscape", stylers: [{ color: "#FFFFFF" }] },
-            {
-              featureType: "road",
-              stylers: [{ saturation: -100 }, { lightness: 45 }],
-            },
-            {
-              featureType: "road.highway",
-              stylers: [{ visibility: "simplified" }],
-            },
-            {
-              featureType: "road.arterial",
-              elementType: "labels.icon",
-              stylers: [{ visibility: "off" }],
-            },
-            {
-              featureType: "administrative",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#ADADAD" }],
-            },
-            { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "poi", stylers: [{ visibility: "off" }] },
-          ],
-        };
-
-        // Get the HTML DOM element that will contain your map
-        // We are using a div with id="map" seen below in the <body>
-        var mapElement = document.getElementById("googlemaps");
-
-        // Create the Google Map using out element and options defined above
-        var map = new google.maps.Map(mapElement, mapOptions);
+    <!-- Use ES Module version of Three.js -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
+        }
       }
     </script>
 
-    <!-- TEXT ROTATOR SETTINGS -->
-    <script type="text/javascript">
-      $(".rotate").textrotator({
-        animation: "fade", // You can pick the way it animates when rotating through words. Options are dissolve (default), fade, flip, flipUp, flipCube, flipCubeUp and spin.
-        separator: ",", // If you don't want commas to be the separator, you can define a new separator (|, &, * etc.) by yourself using this field.
-        speed: 2000, // How many milliseconds until the next word show.
-      });
-    </script>
+    <script type="module" src="/js/script.js"></script>
   </body>
 </html>
